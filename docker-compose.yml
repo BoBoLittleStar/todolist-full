@@ -1,0 +1,36 @@
+services:
+  web:
+    image: node
+    volumes:
+      - .:/app/js
+    working_dir: /app/js
+    command: bash -c "
+      cd web
+      && npm run build
+      && npm install -g serve
+      && serve -s build"
+    ports:
+      - "5000:5000"
+    depends_on:
+      - backend
+  backend:
+    image: gradle:6.8.3-jdk15
+    volumes:
+      - .:/app/spring
+    working_dir: /app/spring
+    command: bash -c "
+      cd Spring-Gradle
+      && gradle bootRun"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456ok
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
