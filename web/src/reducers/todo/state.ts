@@ -1,10 +1,12 @@
 import {createReducer} from "@reduxjs/toolkit";
 import {actions} from "../request";
-import {initialState, State} from "./types";
+import {initialState, TypeState} from "./types";
 
 const reducers = createReducer(initialState, builder => {
 	builder.addCase(actions.load.fulfilled, (state, action) => {
-		return action.payload;
+		return {...action.payload, status: "fulfilled"};
+	}).addCase(actions.load.rejected, (state, action) => {
+		state.status = action.error.message || "unknown error";
 	}).addCase(actions.add.fulfilled, (state, action) => {
 		state.ids.push(action.payload.id);
 		state.count++;
@@ -36,6 +38,6 @@ const reducers = createReducer(initialState, builder => {
 		}));
 	});
 });
-export const selector = (state: { todos: State }) => state.todos;
+export const selector = (state: { todos: TypeState }) => state.todos;
 
 export default reducers;
