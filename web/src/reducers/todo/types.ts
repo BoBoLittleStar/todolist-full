@@ -1,18 +1,20 @@
-export type Item = {
+export type TypeItem = {
 	task: string,
 	checked: boolean,
 }
 
-export type State =
+export type TypeState =
 	{
+		status: string,
 		ids: string[],
 		count: number,
 		items: {
-			[id: string]: Item,
+			[id: string]: TypeItem,
 		},
 	}
 
-export const initialState: State = {
+export const initialState: TypeState = {
+	status: "pending",
 	ids: [],
 	count: 0,
 	items: {},

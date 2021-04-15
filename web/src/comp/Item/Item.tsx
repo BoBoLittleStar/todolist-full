@@ -1,30 +1,21 @@
-import styled from "@emotion/styled";
 import React, {useState} from "react";
 import {useDispatch} from "react-redux";
 import {actions} from "../../reducers/request";
-import {Item as _Item} from "../../reducers/todo/types";
+import {TypeItem} from "../../reducers/todo/types";
 import "./Item.sass";
+import {Button, Div, P} from "./styles";
 
 type Element = {
 	id: string,
-	item: _Item,
+	item: TypeItem,
 }
 
 export default function Item({children: elem}: { children: Element }): JSX.Element {
 	const dispatch = useDispatch();
 	const [edit, setEdit] = useState("");
-	const task = elem.item.task, checked = elem.item.checked, editing = edit === elem.id;
-
-	const Button = styled.button<{ checked: boolean, editing: boolean }>`
-      border-color: ${props => props.editing ? "transparent" : (props.checked ? "#cbdfdb" : "#f0f0f0")};;
-	`;
-	const Div = styled.div<{ checked: boolean, editing: boolean }>`
-      border-color: ${props => props.editing ? "transparent" : (props.checked ? "#5dc2ae" : "transparent")};
-	`;
-	const P = styled.p<{ checked: boolean }>`
-      color: ${props => props.checked ? "lightgray" : "black"};
-      text-decoration-line: ${props => props.checked ? "line-through" : "none"};
-	`;
+	const task = elem.item.task;
+	const checked = elem.item.checked;
+	const editing = edit === elem.id;
 
 	return <li>
 		<div>

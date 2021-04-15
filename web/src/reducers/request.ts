@@ -1,18 +1,20 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {address} from "../config/config";
 import {TodoResponse} from "./response";
-import {Item, State} from "./todo/types";
+import {TypeItem, TypeState} from "./todo/types";
 
-const load = createAsyncThunk<State>("get", async () => {
-	const data: TodoResponse[] = await fetch(address, {
+const load = createAsyncThunk<Omit<TypeState, "status">>("get", async () => {
+	const data: TodoResponse[] | string = await fetch(address, {
 		method: "GET",
-	}).then(response => response.json());
-	let ids: string[] = [], count = 0, items: { [id: string]: Item } = {};
+	}).then(response => response.json()).catch(reason => reason.message);
+	if (typeof data === "string") throw data;
+	let ids: string[] = [], count = 0, items: { [id: string]: TypeItem } = {};
 	data.forEach(elem => {
 		ids.push(elem.id);
 		!elem.checked && count++;
 		items[elem.id] = {task: elem.task, checked: elem.checked};
 	});
+
 	return {ids, count, items};
 });
 
