@@ -6,11 +6,12 @@ services:
     working_dir: /app/js
     command: bash -c "
       cd web
-      && npm run build
+      && npm install
       && npm install -g serve
+      && npm run build
       && serve -s build"
     ports:
-      - "5000:5000"
+      - "3000:5000"
     depends_on:
       - backend
   backend:
@@ -23,6 +24,8 @@ services:
       && gradle bootRun"
     ports:
       - "8080:8080"
+    links:
+      - db
     depends_on:
       - db
   db:
@@ -32,5 +35,5 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123456ok
       POSTGRES_DB: postgres
-    ports:
-      - "5432:5432"
+    expose:
+      - "5432"
