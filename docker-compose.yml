@@ -1,27 +1,21 @@
+version: "3.9"
 services:
   web:
+    container_name: "web"
     image: node
     volumes:
-      - .:/app/js
+      - ./web:/app/js
     working_dir: /app/js
-    command: bash -c "
-      cd web
-      && npm install
-      && npm install -g serve
-      && npm run build
-      && serve -s build"
+    command: npm run build
     ports:
       - "3000:5000"
-    depends_on:
-      - backend
-  backend:
+  spring:
+    container_name: "spring"
     image: gradle:6.8.3-jdk15
     volumes:
-      - .:/app/spring
+      - ./Spring-Gradle:/app/spring
     working_dir: /app/spring
-    command: bash -c "
-      cd Spring-Gradle
-      && gradle bootRun"
+    command: gradle bootRun
     ports:
       - "8080:8080"
     links:
@@ -29,6 +23,7 @@ services:
     depends_on:
       - db
   db:
+    container_name: "db"
     image: postgres
     restart: always
     environment:
