@@ -2,20 +2,12 @@ version: "3.9"
 services:
   web:
     container_name: "web"
-    image: node
-    volumes:
-      - ./web:/app/js
-    working_dir: /app/js
-    command: npm run build
+    build: ./web
     ports:
       - "3000:5000"
   spring:
     container_name: "spring"
-    image: gradle:6.8.3-jdk15
-    volumes:
-      - ./Spring-Gradle:/app/spring
-    working_dir: /app/spring
-    command: gradle bootRun
+    build: ./Spring-Gradle
     ports:
       - "8080:8080"
     links:
@@ -25,6 +17,8 @@ services:
   db:
     container_name: "db"
     image: postgres
+    volumes:
+      - ./db:/var/lib/postgresql/data
     restart: always
     environment:
       POSTGRES_USER: postgres
